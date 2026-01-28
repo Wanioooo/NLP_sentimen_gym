@@ -41,9 +41,9 @@ if st.button("Analyze Review"):
 
         # Metrics Cards
         col1, col2, col3 = st.columns(3)
-        col1.metric("AI Sentiment", sentiment.capitalize())
+        col1.metric("Predicted Sentiment", sentiment.capitalize())
         col2.metric("Confidence", f"{sent['score']:.2f}")
-        col3.metric("Rating Sentiment", rating_to_sentiment(rating).capitalize())
+        col3.metric("Rating-based Sentiment", rating_to_sentiment(rating).capitalize())
 
         # Emotion Bar Chart
         fig = px.bar(emo_df.sort_values("Score (%)"), x="Score (%)", y="Emotion",
