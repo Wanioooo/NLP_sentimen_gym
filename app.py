@@ -1,40 +1,80 @@
 import streamlit as st
+import pandas as pd
 
+# 1️⃣ PAGE CONFIG — MUST COME FIRST
 st.set_page_config(
     page_title="PureGym Sentiment Dashboard",
     page_icon="🏋️",
     layout="wide"
 )
 
-# ---------- GYM THEME ----------
+# 2️⃣ PUT YOUR CSS THEME HERE ⬇️⬇️⬇️
 st.markdown("""
 <style>
-.stApp { background-color: #0F172A; color: #E5E7EB; }
-h1,h2,h3 { color: #22C55E; font-weight: 800; }
-section[data-testid="stSidebar"] { background-color:#020617; }
-button { background:#22C55E !important; color:black !important; border-radius:12px !important; }
+/* MAIN BACKGROUND */
+.stApp {
+    background-color: #F8FAFC;
+    color: #111827;
+}
+
+/* TITLES */
+h1, h2, h3 {
+    color: #111827;
+    font-weight: 800;
+}
+
+/* SIDEBAR */
+section[data-testid="stSidebar"] {
+    background-color: #111827;
+    color: white;
+}
+
+/* SIDEBAR TEXT */
+section[data-testid="stSidebar"] * {
+    color: white !important;
+}
+
+/* BUTTONS */
+div.stButton > button {
+    background-color: #DC2626;
+    color: white;
+    font-weight: 700;
+    border-radius: 10px;
+    border: none;
+    height: 3em;
+}
+div.stButton > button:hover {
+    background-color: #B91C1C;
+}
+
+/* INPUT BOXES */
+textarea, input, select {
+    background-color: white !important;
+    color: #111827 !important;
+    border-radius: 8px !important;
+    border: 1px solid #CBD5E1 !important;
+}
+
+/* METRIC CARDS */
+[data-testid="stMetric"] {
+    background-color: white;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* DATAFRAMES */
+[data-testid="stDataFrame"] {
+    background-color: white;
+    border-radius: 12px;
+}
+
+/* ALERTS */
+.stAlert {
+    border-radius: 10px;
+}
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<div style="text-align:center; padding:40px;">
-<h1>🏋️ PureGym Sentiment Intelligence Dashboard</h1>
-<p style="font-size:18px;color:#CBD5E1;">
-AI-powered analysis of gym reviews & social media conversations
-</p>
-</div>
-""", unsafe_allow_html=True)
-
-c1, c2, c3 = st.columns(3)
-c1.metric("💬 Reviews Analyzed", "1,000+")
-c2.metric("😊 Overall Sentiment", "Positive")
-c3.metric("🔥 Data Sources", "Reviews + Social Media")
-
-st.markdown("## 🚀 Features")
-st.markdown("""
-- ✍️ **Single Review Sentiment & Emotion**
-- 📁 **Batch CSV Review Analysis**
-- 🔴 **Social Media Sentiment & Emotion Trends**
-""")
-
-st.info("⬅️ Use the sidebar to explore each module")
+# 3️⃣ ONLY AFTER THIS — YOUR UI CODE
+st.title("🏋️ PureGym Sentiment Analysis Dashboard")
