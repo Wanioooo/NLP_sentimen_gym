@@ -54,5 +54,5 @@ st.markdown("""
 - 📁 Batch CSV review analysis  
 - ⚠️ Sentiment vs rating mismatch detection  
 - 📊 Visual emotion breakdown  
-- 📱 Social media feed analysis (CSV-based)
+- 📱 Social media feed analysis 
 """)
