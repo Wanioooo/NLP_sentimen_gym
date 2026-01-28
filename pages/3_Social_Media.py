@@ -1,52 +1,47 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from utils import load_models, batch_predict, fetch_tweets, label_map, emoji_map
+from transformers import pipeline
+from theme import apply_light_blue_theme
 
-st.set_page_config(page_title="Social Media", layout="wide")
+st.set_page_config(page_title="Social Media Analysis", layout="wide")
+apply_light_blue_theme()
 
-st.markdown("""
-<style>
-.stApp { background-color:#0F172A; color:#E5E7EB; }
-h1,h2,h3 { color:#22C55E; }
-</style>
-""", unsafe_allow_html=True)
+label_map = {
+    "LABEL_0": "negative",
+    "LABEL_1": "neutral",
+    "LABEL_2": "positive"
+}
 
-st.header("🔴 Social Media Sentiment & Emotion Analysis")
+@st.cache_resource
+def load_model():
+    return pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment")
 
-sentiment_model, emotion_model = load_models()
+model = load_model()
 
-limit = st.slider("Number of posts", 5, 30, 10)
+st.header("📱 Live Social Media Feed Analysis (Twitter)")
 
-if st.button("Analyze Social Media"):
-    posts = fetch_tweets("PureGym", limit)
+st.info("⚠️ Currently using sample tweets CSV. Replace with live scraping if allowed.")
 
-    s_preds = batch_predict(sentiment_model, posts)
-    e_preds = batch_predict(emotion_model, posts)
+# Upload CSV with tweets
+file = st.file_uploader("Upload CSV of tweets (with column 'tweet')", type=["csv"])
 
-    sentiments = [label_map[x["label"]] for x in s_preds]
-    emotions = [max(e, key=lambda x: x["score"])["label"] for e in e_preds]
+if file:
+    df = pd.read_csv(file)
+    st.dataframe(df.head())
 
-    df = pd.DataFrame({
-        "Post": posts,
-        "Sentiment": sentiments,
-        "Emotion": emotions
-    })
+    tweet_col = st.selectbox("Select the column containing tweets", df.columns)
 
-    st.subheader("📊 Sentiment Distribution")
-    fig1 = px.pie(df, names="Sentiment")
-    fig1.update_layout(plot_bgcolor="#020617", paper_bgcolor="#020617",
-                       font_color="white")
-    st.plotly_chart(fig1, use_container_width=True)
+    if st.button("Analyze Tweets"):
+        texts = df[tweet_col].astype(str).tolist()
+        preds = model(texts)
+        df["AI Sentiment"] = [label_map[p["label"]] for p in preds]
 
-    st.subheader("🎭 Emotion Distribution")
-    emo_df = df["Emotion"].value_counts().reset_index()
-    emo_df.columns = ["Emotion","Count"]
-    emo_df["Emotion"] = emo_df["Emotion"].apply(lambda x: emoji_map[x] + " " + x)
+        st.subheader("📊 Sentiment Summary")
+        counts = df["AI Sentiment"].value_counts()
+        st.bar_chart(counts)
 
-    fig2 = px.bar(emo_df, x="Emotion", y="Count")
-    fig2.update_layout(plot_bgcolor="#020617", paper_bgcolor="#020617",
-                       font_color="white")
-    st.plotly_chart(fig2, use_container_width=True)
-
-    st.dataframe(df)
+        st.subheader("Detailed Results")
+        st.dataframe(df.head())
+else:
+    st.info("Upload a CSV file containing tweets to start analysis")
