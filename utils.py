@@ -68,6 +68,7 @@ def fetch_tweets(query, limit=50):
         df = pd.read_csv("sample_tweets.csv")
         tweets = df["tweet"].astype(str).tolist()
     except FileNotFoundError:
+        # fallback simulated tweets
         tweets = [
             "PureGym has amazing equipment and friendly staff!",
             "Too crowded during peak hours, very frustrating.",
