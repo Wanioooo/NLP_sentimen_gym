@@ -7,7 +7,7 @@ st.set_page_config(
 )
 
 st.title("🏋️ Gym Sentiment Analysis Dashboard")
-st.write("AI-powered dashboard to analyze customer reviews using NLP.")
+st.write("AI-powered dashboard to analyze customer reviews using sentimen analysis.")
 
 st.markdown("""
 <div style="
