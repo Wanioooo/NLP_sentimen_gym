@@ -18,7 +18,7 @@ def load_models():
 sentiment_model, emotion_model = load_models()
 
 review = st.text_area("Enter a customer review:")
-user_rating = st.radio(
+rating = st.radio(
     "Give a rating:",
     options=[1, 2, 3, 4, 5],
     format_func=lambda x: "⭐" * x,
