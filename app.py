@@ -1,7 +1,3 @@
-# ==============================
-# app.py (Homepage)
-# ==============================
-
 import streamlit as st
 
 st.set_page_config(
@@ -13,6 +9,7 @@ st.set_page_config(
 st.title("🏋️ PureGym Customer Sentiment Dashboard")
 st.markdown("""
 Welcome to the **PureGym Sentiment Analysis Dashboard**.  
+
 This dashboard allows you to:
 - Analyze single reviews
 - Analyze batch reviews via CSV
