@@ -5,12 +5,7 @@ from utils import load_models, label_map, emoji_map, rating_to_sentiment
 
 st.set_page_config(page_title="Single Review", layout="wide")
 
-st.markdown("""
-<style>
-.stApp { background-color:#0F172A; color:#E5E7EB; }
-h1,h2,h3 { color:#22C55E; }
-</style>
-""", unsafe_allow_html=True)
+st.markdown("""<style>...</style>""", unsafe_allow_html=True)
 
 st.header("✍️ Single Review Analysis")
 
