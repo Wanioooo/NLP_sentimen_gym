@@ -1,6 +1,12 @@
 # ======================================================
 # 📁 BATCH REVIEW ANALYSIS
 # ======================================================
+
+import streamlit as st
+from utils import load_models, batch_predict, rating_to_sentiment, clean_text, label_map, emoji_map
+
+st.set_page_config(page_title="Batch Analysis", layout="wide")
+
 st.header("📁 Batch Review Analysis (CSV Upload)")
 
 uploaded_file = st.file_uploader("Upload a CSV file containing reviews:", type=["csv"])
