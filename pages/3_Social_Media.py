@@ -1,6 +1,12 @@
 # ======================================================
 # 🔴 SIMULATED LIVE SOCIAL MEDIA FEED ANALYSIS
 # ======================================================
+
+import streamlit as st
+from utils import load_models, batch_predict, rating_to_sentiment, clean_text, label_map, emoji_map
+
+st.set_page_config(page_title="Social Media Analysis", layout="wide")
+
 st.header("🔴 Live Social Media Feed Analysis (Simulated Twitter/X)")
 
 st.caption(
