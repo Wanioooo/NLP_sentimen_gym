@@ -2,16 +2,11 @@ import streamlit as st
 import pandas as pd
 from transformers import pipeline
 from sklearn.metrics import confusion_matrix
-from theme import apply_light_blue_theme
 
 st.set_page_config(page_title="Batch Analysis", layout="wide")
-apply_light_blue_theme()
+st.header("📁 Batch Review Analysis")
 
-label_map = {
-    "LABEL_0": "negative",
-    "LABEL_1": "neutral",
-    "LABEL_2": "positive"
-}
+label_map = {"LABEL_0":"negative","LABEL_1":"neutral","LABEL_2":"positive"}
 
 @st.cache_resource
 def load_model():
@@ -19,19 +14,15 @@ def load_model():
 
 model = load_model()
 
-def rating_to_sentiment(r):
-    return "negative" if r <= 2 else "neutral" if r == 3 else "positive"
+def rating_to_sentiment(r): return "negative" if r<=2 else "neutral" if r==3 else "positive"
 
-st.header("📁 Batch Review Analysis")
-
-file = st.file_uploader("Upload CSV file", type=["csv"])
-
+file = st.file_uploader("Upload CSV file with reviews", type=["csv"])
 if file:
     df = pd.read_csv(file)
     st.dataframe(df.head())
 
-    text_col = st.selectbox("Review column", df.columns)
-    rating_col = st.selectbox("Rating column", df.columns)
+    text_col = st.selectbox("Select Review Column", df.columns)
+    rating_col = st.selectbox("Select Rating Column", df.columns)
 
     if st.button("Analyze Dataset"):
         texts = df[text_col].astype(str).tolist()
@@ -40,17 +31,11 @@ if file:
         df["AI Sentiment"] = [label_map[p["label"]] for p in preds]
         df["Rating Sentiment"] = df[rating_col].apply(rating_to_sentiment)
 
-        st.dataframe(df.head())
-
-        cm = confusion_matrix(
-            df["Rating Sentiment"],
-            df["AI Sentiment"],
-            labels=["negative","neutral","positive"]
-        )
+        st.subheader("📊 Batch Summary")
+        counts = df["AI Sentiment"].value_counts()
+        st.bar_chart(counts)
 
         st.subheader("⚠️ Confusion Matrix")
-        st.dataframe(pd.DataFrame(
-            cm,
-            index=["Rating Neg","Rating Neu","Rating Pos"],
-            columns=["AI Neg","AI Neu","AI Pos"]
-        ))
+        cm = confusion_matrix(df["Rating Sentiment"], df["AI Sentiment"], labels=["negative","neutral","positive"])
+        st.dataframe(pd.DataFrame(cm, index=["Rating Neg","Rating Neu","Rating Pos"],
+                                  columns=["AI Neg","AI Neu","AI Pos"]))
