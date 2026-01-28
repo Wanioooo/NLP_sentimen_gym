@@ -1,5 +1,4 @@
 import streamlit as st
-from theme import apply_light_blue_theme
 
 st.set_page_config(
     page_title="PureGym Sentiment Dashboard",
