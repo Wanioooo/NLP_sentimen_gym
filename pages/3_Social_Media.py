@@ -4,7 +4,7 @@ import plotly.express as px
 from utils import load_models, batch_predict, fetch_tweets, label_map, emoji_map
 
 st.set_page_config(page_title="Social Media Analysis", layout="wide")
-st.header("📱 Social Media Feed Analysis (Simulated Twitter/X)")
+st.header("📱 Social Media Feed Analysis")
 
 st.caption(
     "Social media posts are simulated using pre-collected data due to API and platform limitations."
