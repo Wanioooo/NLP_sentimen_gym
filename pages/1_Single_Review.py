@@ -18,7 +18,13 @@ def load_models():
 sentiment_model, emotion_model = load_models()
 
 review = st.text_area("Enter a customer review:")
-rating = st.radio("Rating:", [1,2,3,4,5], horizontal=True)
+user_rating = st.radio(
+    "Give a rating:",
+    options=[1, 2, 3, 4, 5],
+    format_func=lambda x: "⭐" * x,
+    horizontal=True
+)
+
 
 def rating_to_sentiment(r): return "negative" if r<=2 else "neutral" if r==3 else "positive"
 
