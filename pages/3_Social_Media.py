@@ -1,17 +1,12 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
 from transformers import pipeline
-from theme import apply_light_blue_theme
+import plotly.express as px
 
 st.set_page_config(page_title="Social Media Analysis", layout="wide")
-apply_light_blue_theme()
+st.header("📱 Social Media Feed Analysis (CSV-based)")
 
-label_map = {
-    "LABEL_0": "negative",
-    "LABEL_1": "neutral",
-    "LABEL_2": "positive"
-}
+label_map = {"LABEL_0":"negative","LABEL_1":"neutral","LABEL_2":"positive"}
 
 @st.cache_resource
 def load_model():
@@ -19,18 +14,12 @@ def load_model():
 
 model = load_model()
 
-st.header("📱 Live Social Media Feed Analysis (Twitter)")
-
-st.info("⚠️ Currently using sample tweets CSV. Replace with live scraping if allowed.")
-
-# Upload CSV with tweets
-file = st.file_uploader("Upload CSV of tweets (with column 'tweet')", type=["csv"])
-
+file = st.file_uploader("Upload CSV of tweets", type=["csv"])
 if file:
     df = pd.read_csv(file)
     st.dataframe(df.head())
 
-    tweet_col = st.selectbox("Select the column containing tweets", df.columns)
+    tweet_col = st.selectbox("Select Tweet Column", df.columns)
 
     if st.button("Analyze Tweets"):
         texts = df[tweet_col].astype(str).tolist()
@@ -43,5 +32,3 @@ if file:
 
         st.subheader("Detailed Results")
         st.dataframe(df.head())
-else:
-    st.info("Upload a CSV file containing tweets to start analysis")
