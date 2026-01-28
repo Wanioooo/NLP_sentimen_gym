@@ -1,13 +1,6 @@
-# ==============================
-# utils.py
-# ==============================
-
 import pandas as pd
 from transformers import pipeline
 
-# -------------------------------
-# LABEL & EMOJI MAPS
-# -------------------------------
 label_map = {
     "LABEL_0": "negative",
     "LABEL_1": "neutral",
@@ -24,61 +17,52 @@ emoji_map = {
     "neutral": "😐"
 }
 
-# -------------------------------
-# LOAD MODELS
-# -------------------------------
 def load_models():
     sentiment_model = pipeline(
         "sentiment-analysis",
         model="cardiffnlp/twitter-roberta-base-sentiment"
     )
-
     emotion_model = pipeline(
         "text-classification",
         model="j-hartmann/emotion-english-distilroberta-base",
         top_k=5
     )
-
     return sentiment_model, emotion_model
 
-# -------------------------------
-# HELPER FUNCTIONS
-# -------------------------------
-def batch_predict(pipeline_model, texts, batch_size=8):
+def batch_predict(model, texts, batch_size=8):
     results = []
     for i in range(0, len(texts), batch_size):
         batch = texts[i:i + batch_size]
-        preds = pipeline_model(batch, truncation=True, max_length=256)
+        preds = model(batch, truncation=True, max_length=256)
         results.extend(preds)
     return results
 
-def rating_to_sentiment(rating):
-    if rating <= 2:
+def rating_to_sentiment(r):
+    if r <= 2:
         return "negative"
-    elif rating == 3:
+    elif r == 3:
         return "neutral"
     else:
         return "positive"
 
-def clean_text(text):
-    return str(text).strip()
+def clean_text(t):
+    return str(t).strip()
 
-def fetch_tweets(query, limit=50):
+def fetch_tweets(query, limit=20):
     try:
         df = pd.read_csv("sample_tweets.csv")
         tweets = df["tweet"].astype(str).tolist()
-    except FileNotFoundError:
-        # fallback simulated tweets
+    except:
         tweets = [
             "PureGym has amazing equipment and friendly staff!",
-            "Too crowded during peak hours, very frustrating.",
-            "Affordable gym membership and clean facilities.",
-            "Terrible customer service, very disappointed.",
-            "Love the 24/7 access, makes life so much easier.",
-            "Machines were broken for weeks.",
-            "Great value for money and motivating environment.",
+            "Too crowded during peak hours.",
+            "Affordable membership and clean gym.",
+            "Terrible customer service experience.",
+            "Love the 24/7 access!",
+            "Machines broken for weeks.",
+            "Great value for money.",
             "Staff were rude and unhelpful.",
-            "Best gym experience I've had so far!",
-            "Gym is okay but can be overcrowded sometimes."
+            "Best gym experience so far.",
+            "Gym is okay but overcrowded."
         ]
     return tweets[:limit]
