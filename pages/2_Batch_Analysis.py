@@ -127,15 +127,6 @@ if uploaded_file:
         )
         st.plotly_chart(fig_pie, use_container_width=True)
 
-        # Bar chart
-        fig_bar = px.bar(
-            x=sentiment_counts.index,
-            y=sentiment_counts.values,
-            text=[f"{p:.1f}%" for p in sentiment_percent.values],
-            title="AI Sentiment Distribution (Bar Chart)"
-        )
-        fig_bar.update_traces(textposition="outside")
-        st.plotly_chart(fig_bar, use_container_width=True)
 
         # -------------------------------
         # Emotion Distribution Chart
